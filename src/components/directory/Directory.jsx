@@ -12,10 +12,10 @@ export default function Directory() {
     return (
         <div className='directory-menu'>
             {
-                section.map((elem) => {
+                section.map(({id, ...otherProps}) => {
                     return(
                         <>
-                            <MenuItem key={elem.id} title={elem.title} imgUrl={elem.imageUrl} />
+                            <MenuItem key={id} {...otherProps} />
                         </>
                     )
                 })
