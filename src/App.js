@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import Shop from './components/shop/Shop';
 import Header from './components/header/Header';
 import SignInLogIn from './components/login-signin/SignInLogIn';
-import { auth } from './firebase/firebase.utils'
+import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 
 function App() {
 
@@ -14,9 +14,19 @@ function App() {
   //unsuscribeFromAuth = null
 
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      setUserAuth(user)
-      console.log(user)
+    auth.onAuthStateChanged(async userAuth => {
+      if(userAuth) {
+      const userRef = await createUserProfileDocument(userAuth)
+
+      userRef.onSnapshot(snapShot => {
+        setUserAuth({
+          id: snapShot.id,
+          ...snapShot.data()
+        })
+      })
+      console.log(userAuth)
+      }
+      setUserAuth(userAuth)
     })
   }, [])
 
