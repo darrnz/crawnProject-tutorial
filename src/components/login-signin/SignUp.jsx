@@ -54,15 +54,15 @@ export default function SignUp() {
                     value={signUpInfo.displayName}
                     label='Display Name'
                     required
-                    onChangle={handleChange}
+                    onChange={handleChange}
                 />
                 <FormInput
                     type='email'
-                    name='Email'
+                    name='email'
                     value={signUpInfo.email}
                     label='Email'
                     required
-                    onChangle={handleChange}
+                    onChange={handleChange}
                 />
                 <FormInput
                     type='password'
@@ -70,15 +70,15 @@ export default function SignUp() {
                     value={signUpInfo.password}
                     label='Password'
                     required
-                    onChangle={handleChange}
+                    onChange={handleChange}
                 />
                 <FormInput
                     type='password'
-                    name='confirm-password'
+                    name='confirmPassword'
                     value={signUpInfo.confirmPassword}
                     label='Confirm Password'
                     required
-                    onChangle={handleChange}
+                    onChange={handleChange}
                 />
                 <CustomBtn type='submit'>SIGN UP</CustomBtn>
             </form>
