@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 import './directory.styless.scss'
-import { sections } from '../../interfaces/interfaces'
 import MenuItem from '../menu-item/Menu-item'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { selectDirectorySections } from '../../redux/directory/directory.selector'
 
 
-export default function Directory() {
-
-    const [section, setSection] = useState(sections)
-    console.log(section)
+function Directory({ sections }) {
 
     return (
         <div className='directory-menu'>
             {
-                section.map((elem) => {
+                sections.map((elem) => {
                     return(
                         <>
                             <MenuItem key={elem.id} title={elem.title} imgUrl={elem.imageUrl} linkUrl={elem.linkUrl} />
@@ -23,3 +22,9 @@ export default function Directory() {
         </div>
     )
 }
+
+const mapStateToProps = createStructuredSelector({
+    sections: selectDirectorySections
+})
+
+export default connect(mapStateToProps)(Directory)

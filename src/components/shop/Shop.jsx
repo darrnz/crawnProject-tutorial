@@ -1,27 +1,17 @@
-import React, {useState} from 'react'
-import { SHOP_DATA } from '../../interfaces/shoppingData'
-import PreviewCollection from '../previewCollection/PreviewCollection'
+import React from 'react'
+import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
+import CollectionPage from './collection/CollectionsPage'
+import CollectionsOverview from './collections-overview/CollectionsOverview'
 
-export default function Shop() {
-
-    const [articles, setArticles] = useState(SHOP_DATA)
+function Shop({ match }) {
 
     return (
         <div className='shop-page'>
-            {
-                articles &&
-                    articles.map(collection => {
-                        return(
-                            <PreviewCollection 
-                                key={collection.id} 
-                                title={collection.title} 
-                                routeName={collection.routeName}
-                                items={collection.items}
-                        />
-                        )
-
-                    })
-            }
+            <Route exact path={`${match.path}`} component={CollectionsOverview} />
+            <Route path={`${match.path}/:collectionId`} component={CollectionPage}/>
         </div>
     )
 }
+
+export default Shop
