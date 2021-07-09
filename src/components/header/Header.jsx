@@ -2,41 +2,41 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import './header.styles.scss'
+import styled, { css } from 'styled-components'
 import { auth } from '../../firebase/firebase.utils'
 import CartIcon from './cartIcon/CartIcon'
 import CartDropdown from './cartIcon/CartDropdown'
-import { selectCarHidden, selectCartHidden } from '../../redux/cart/cart.selectors'
+import { selectCarHidden } from '../../redux/cart/cart.selectors'
 import { selectCurrentUser } from '../../redux/user/user.selector'
 
 function Header({currentUser, hidden}) {
     return (
-        <div className='header'>
-            <Link to='/' className='logo-container'>
+        <HeaderContainer>
+            <LogoContainer to='/'>
                 <img src='/crown.svg' alt='logo' className='logo'/>
-            </Link>
-            <div className='options'>
-                <Link className='option' to='/shop'>
+            </LogoContainer>
+            <OptionsContainer >
+                <OptionLink to='/shop'>
                     SHOP
-                </Link>
-                <Link className='option' to='/shop'>
+                </OptionLink>
+                <OptionLink to='/shop'>
                     CONTACT
-                </Link>
+                </OptionLink>
                 {
                     currentUser ? 
-                    <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
+                    <OptionDiv onClick={() => auth.signOut()}>SIGN OUT</OptionDiv>
                     :
-                    <Link className='option' to='/signin'>
+                    <OptionLink to='/signin'>
                         SIGN IN
-                    </Link>
+                    </OptionLink>
 
                 }
                 <CartIcon />
-            </div>
+            </OptionsContainer>
             {
                 !hidden ? <CartDropdown /> : ''
             }
-        </div>
+        </HeaderContainer>
     )
 }
 
@@ -46,3 +46,40 @@ const mapStateToProps = createStructuredSelector({
 })
 
 export default connect(mapStateToProps)(Header);
+
+const OptionContainerStyles = css`
+    padding: 10px 15px;
+    cursor: pointer;
+`
+
+const OptionLink = styled(Link)`
+    ${OptionContainerStyles}
+`;
+
+const OptionDiv = styled.div`
+    ${OptionContainerStyles}
+`
+
+const HeaderContainer = styled.div`
+    height: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+`
+
+const LogoContainer = styled(Link)`
+    height: 100%;
+    width: 70px;
+    padding: 25px;
+`
+
+const OptionsContainer = styled.div`
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+`;
+
+

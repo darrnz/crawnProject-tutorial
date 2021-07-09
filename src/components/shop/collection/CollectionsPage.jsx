@@ -6,7 +6,7 @@ import './collectionsPage.styles.scss'
 
 function CollectionPage({ collection }) {
     console.log(collection)
-    const { title, items} = collection
+    const { title, items } = collection
     console.log(items)
 
     return (
