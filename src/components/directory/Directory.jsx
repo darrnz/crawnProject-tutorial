@@ -14,7 +14,7 @@ function Directory({ sections }) {
                 sections.map((elem) => {
                     return(
                         <>
-                            <MenuItem key={elem.id} title={elem.title} imgUrl={elem.imageUrl} linkUrl={elem.linkUrl} />
+                            <MenuItem key={elem.title} title={elem.title} imgUrl={elem.imageUrl} linkUrl={elem.linkUrl} />
                         </>
                     )
                 })

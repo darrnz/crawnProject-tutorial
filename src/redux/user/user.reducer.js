@@ -8,10 +8,24 @@ const userReducer = (state = INITAL_STATE, action) => {
     
 
     switch (action.type) {
-        case UserActionTypes.SET_CURRENT_USER:
+        case UserActionTypes.SING_IN_SUCCESS:
             return {
                 ...state,
-                currentUser: action.payload
+                currentUser: action.payload,
+                error: null
+            };
+        case UserActionTypes.SIGN_OUT_SUCCESS:
+            return {
+                ...state,
+                currentUser: null,
+                error: null
+            }
+        
+        case UserActionTypes.SING_IN_FAILURE:
+        case UserActionTypes.SING_OUT_FAILURE:
+            return {
+                ...state,
+                error: action.payload
             };
     
         default:
