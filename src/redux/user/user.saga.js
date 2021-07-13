@@ -1,11 +1,18 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects'
 import { UserActionTypes } from './user.types'
 import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils'
-import { signInSuccess, signInFailure, signOutSuccess, signOutFailure } from './user.actions'
+import { 
+    signInSuccess, 
+    signInFailure, 
+    signOutSuccess, 
+    signOutFailure,
+    emailSignUpFailure,
+    emailSignUpSuccess
+} from './user.actions'
 
-export function* getSnapshotFromUserAuth(userAuth) {
+export function* getSnapshotFromUserAuth(userAuth, additionalData) {
     try {
-        const userRef = yield call(createUserProfileDocument, userAuth)
+        const userRef = yield call(createUserProfileDocument, userAuth, additionalData)
         const userSnapshot = yield userRef.get()
         yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }))
     } catch (error) {
@@ -48,8 +55,31 @@ export function* signInWithEmail({ payload: { email, password }}) {
 
 export function* onEmailSignInStart() {
     yield takeLatest(UserActionTypes.EMAIL_SING_IN_START, signInWithEmail)
-    
 }
+
+export function* onEmailSignupStart() {
+    yield takeLatest(UserActionTypes.SIGN_UP_START, signUpWithEmail)
+}
+
+export function* signUpWithEmail({ payload: { email, password, displayName } }) {
+    try {
+        const  { user } = yield auth.createUserWithEmailAndPassword(email, password)
+        yield createUserProfileDocument(user, {displayName})
+        yield put(emailSignUpSuccess({user, additionalData: { displayName } }))
+    } catch (error) {
+        put(emailSignUpFailure(error))
+    }
+}
+
+export function* onSignUpSuccess() {
+    yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfetSignup)
+}
+
+export function* signInAfetSignup({ payload: { user, additionalData } }) {
+    yield getSnapshotFromUserAuth(user, additionalData)
+}
+
+
 
 export function* onCheckUserSession() {
     yield takeLatest(UserActionTypes.CHECK_USER_SESSION, isUserAuthenticated)
@@ -74,7 +104,9 @@ export function* userSagas() {
         call(onGoogleSignInStart), 
         call(onEmailSignInStart), 
         call(onCheckUserSession), 
-        call(onSignOutStart)
+        call(onSignOutStart), 
+        call(onEmailSignupStart), 
+        call(onSignUpSuccess)
     ])
 }
 

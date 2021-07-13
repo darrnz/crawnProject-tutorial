@@ -21,7 +21,7 @@ function App(props) {
   useEffect(() => {
     checkUserSession()
 
-  }, []) 
+  }, [checkUserSession]) 
 
   return (
     <div>
